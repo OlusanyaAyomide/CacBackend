@@ -1,0 +1,26 @@
+{
+  "name": "cac2",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
+    "build": "NODE_ENV=production nodemon server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "joi": "^17.9.2",
+    "mongoose": "^7.3.4",
+    "nodemon": "^3.0.1"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0"
+  }
+}
