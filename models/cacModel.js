@@ -9,10 +9,6 @@ const cacPostSchema = new mongoose.Schema({
     files:[
         {type:String}
     ],
-    createdAt:{
-    type:Date,
-    default:Date.now()
-    },
     },
     {
         timestamps: { createdAt: true, updatedAt: false }
@@ -21,7 +17,9 @@ const cacPostSchema = new mongoose.Schema({
 );
 
 cacPostSchema.pre(/^find/,function(next){
-    this.select("-__v")
+    this.select("-__v").sort({
+        createdAt: -1
+      })
     next()
 })
   

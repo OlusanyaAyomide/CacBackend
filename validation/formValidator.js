@@ -79,3 +79,19 @@ export async function updateStatusValidation(req,res,next){
   }
 return next()
 }
+
+
+export async function validateNewUser(req,res,next){
+  const schema = Joi.object({
+    isAdmin:Joi.boolean().required(),
+    email:Joi.string().required(),
+    name:Joi.string().required(),
+    password:Joi.string().required()
+  })
+  const validation = schema.validate(req.body);
+  if (validation.error) {
+    const error = validation.error.message ? validation.error.message : validation.error.details[0].message;
+    return res.status(200).json({error})
+  }
+  return next()
+}
