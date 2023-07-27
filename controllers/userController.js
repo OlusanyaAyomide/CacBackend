@@ -1,3 +1,4 @@
+import { isObjectIdOrHexString, isValidObjectId } from "mongoose";
 import { CacUser } from "../models/userModel.js";
 import catchAsync from "../utils/globalerr.js";
 import { JWTSECRET } from "./constants.js";
@@ -12,25 +13,47 @@ export const createNewUser = catchAsync(async (req, res, next) => {
     
 });
 
-export const LogInUser = catchAsync(async (req,res,next)=>{
-  const {email,password} = req.body
+export const logInUser = catchAsync(async (req,res,next)=>{
+  const email = req.body.email.trim(); // Trimming: minor sanitization
+  const password = req.body.password.trim();
+
   if (!email || !password) {
-    return res.status(400).json({error:"Email or password field missing"});
-  }
-  const user = await CacUser.findOne({ email }).select("+password");
-  const isPasswordCorrect = await user?.checkPassword(password, user.password);
-  if (!user || !isPasswordCorrect) {
     return res.status(400).json({
-      status:"fail",error:"Username or password incorrect"
+      status: "fail",
+      error:"Email or password field missing"
     });
   }
+
+  // Try to find a user
+  const user = await CacUser.findOne({ email }).select("+password");
+
+  // If user not found
+  if (!user) {
+    return res.status(404).json({
+      status:"fail",
+      error:"User not found, try signing up "
+    });
+  }
+
+  // check for password correctness
+  const isPasswordCorrect = await user.checkPassword(password, user.password);
+
+  // If password is wrong
+  if (!isPasswordCorrect) {
+    return res.status(400).json({
+      status:"fail",
+      error:"Incorrect password provided"
+    });
+  }
+
+  // Sign the JWT
   const token = jwt.sign(
     { id: user._id, email: user.email },
     JWTSECRET,
-    {
-      expiresIn:"90d",
-    }
+    { expiresIn:"7d" } // changed from 90d to 7d
   );
+
+  // Return token on successful process
   res.status(200).json({
     status: "success",
     token,
@@ -39,19 +62,37 @@ export const LogInUser = catchAsync(async (req,res,next)=>{
 
 })
 
-export const GetUserProfile = catchAsync(async(req,res,next)=>{
+export const getUserProfile = catchAsync(async(req,res,next)=>{
   const user = await CacUser.findById(req.user.id).select("-password -__v")
   return res.status(200).json({user})
 })
 
-export const GetAllUsers = catchAsync(async(req,res,next)=>{
+export const getAllUsers = catchAsync(async(req,res,next)=>{
   const user = await CacUser.find({}).select("-password")
   return res.status(200).json({user})
 })
 
-export const Deleteusers= catchAsync(async(req,res,next)=>{
-  const user = await CacUser.findById(req.params.id)
-  if(!user){return res.status(400).json({error:"User does not exist"})}
-  const deleted =await CacUser.findByIdAndDelete(user._id)
-  return res.status(201).json({status:"success"})
+export const deleteUsers= catchAsync(async(req,res,next)=>{
+  // If the user ID provided is invalid
+  if (!isValidObjectId(req.params.id)) {
+    return res.status(400).json({
+      status:"error",
+      error: "Invalid User ID provided"
+    })
+  }
+
+  // Attempt a deletion
+  const deleted = await CacUser.findByIdAndDelete(req.params.id);
+  // If the deletion failed
+  if (!deleted) {
+    return res.status(404).json({
+      status:"error",
+      error: "User not found in database"
+    })
+  }
+
+  // Everything Successful
+  return res.status(200).json({
+    status:"success"
+  })
 })
