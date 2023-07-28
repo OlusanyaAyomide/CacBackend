@@ -3,13 +3,17 @@ import { Field } from "../models/FieldModel.js";
 import { Business } from "../models/businessModel.js";
 import { Info } from "../models/infoModel.js";
 import { cacPost } from "../models/cacModel.js";
+import { isValidObjectId } from "mongoose";
 
 export const postField = catchAsync(async(req,res,next)=>{
 
-   const infos =await Info.insertMany(req.body.business.info)
+   const infos = await Info.insertMany(req.body.business.info)
    const info = infos.map((item)=>{return item._id})
-   const newbusiness=await Business.create({...req.body.business,info})
-   const newField = await Field.create({...req.body,business:newbusiness._id})
+   const newBusiness = await Business.create({...req.body.business,info})
+   const newField = await Field.create({
+      ...req.body,
+      business:newBusiness._id
+   })
    return res.status(200).json({
       status:'success',
       data:newField
@@ -18,8 +22,8 @@ export const postField = catchAsync(async(req,res,next)=>{
 
 export const getFields = catchAsync(async(req,res,next)=>{
    const getTimeAgo = (number)=>{
-   const TimeAgo = new Date()
-   return TimeAgo.setDate(TimeAgo.getDate()-number)
+      const TimeAgo = new Date()
+      return TimeAgo.setDate(TimeAgo.getDate()-number)
    }
 
    const { status, duration,page,limit } = req.query;
@@ -28,29 +32,35 @@ export const getFields = catchAsync(async(req,res,next)=>{
    const userpage = page?page:1
    const pagelimit = limit?limit:10
    if (status) {
-    filter.status = status;
+      filter.status = status;
    }
    
 
 
    if (duration) {
       const currentDate = new Date();
-      if (duration === 'week') {
-        const oneWeekAgo = getTimeAgo(7)
-        filter.createdAt = { $gte: oneWeekAgo, $lte: currentDate };
-      } else if (duration === 'month') {
-        const oneMonthAgo = getTimeAgo(31)
-        filter.createdAt = { $gte: oneMonthAgo, $lte: currentDate };
+      // Changed from if-else to "switch-case"
+      switch (duration) {
+         case "week":
+            const oneWeekAgo = getTimeAgo(7)
+            filter.createdAt = { $gte: oneWeekAgo, $lte: currentDate };
+            break;
+         case "month":
+            const oneMonthAgo = getTimeAgo(7)
+            filter.createdAt = { $gte: oneMonthAgo, $lte: currentDate };
+            break;
       }
-    }
+   }
 
-   const all = await Field.find({}).count()
-   const currentDate = new Date();
-   const sevenDaysAgo = getTimeAgo(7)
-   const week =await  Field.find({ createdAt: { $gte: sevenDaysAgo, $lte: currentDate } }).count()
-   const monthAgo = getTimeAgo(31)
-   const month = await Field.find({ createdAt: { $gte: monthAgo, $lte: currentDate } }).count()
+   // Get the count of all fields
+   const all = await Field.find({}).count() // Get the count of all fields
+   const currentDate = new Date(); // Get current date
+   const sevenDaysAgo = getTimeAgo(7) // Get seven days ago
+   const week = await Field.find({ createdAt: { $gte: sevenDaysAgo, $lte: currentDate } }).count() // Get all created between now and seven days ago
+   const monthAgo = getTimeAgo(31) // Get one month ago
+   const month = await Field.find({ createdAt: { $gte: monthAgo, $lte: currentDate } }).count() // Get all created between now and one month ago
 
+   // Define the filter
    const entrystatus = await Field.aggregate([
       {
          $group:{
@@ -63,12 +73,12 @@ export const getFields = catchAsync(async(req,res,next)=>{
    ])
 
 
-   
+
+   // Filter the result
    const allPost = await Field.find(filter).limit(pagelimit).skip((userpage*pagelimit)-pagelimit)
    const totalPage = Math.ceil(all/pagelimit)
 
-
-
+   // Return the final filtered result
    return res.status(200).json({
       status:"success",  
       length:allPost.length,
@@ -82,7 +92,22 @@ export const getFields = catchAsync(async(req,res,next)=>{
 
 
 export const findField = catchAsync(async(req,res,next)=>{
+   // Trim ID, minor sanitization
+   let id = req.params.id.trim();
+
+   // Find field
    const field = await Field.findById(req.params.id)
+
+   // If no fields found
+   if (!field) {
+      return res.status(404).json(
+         {
+            status:"failed",
+            message: "Field not found"  
+         }
+      )
+
+   }
    return res.status(200).json(
       {
          status:"success",
@@ -92,6 +117,10 @@ export const findField = catchAsync(async(req,res,next)=>{
 })
 
 export const updateStatus = catchAsync(async(req,res,next)=>{
+   // Trimming, minor sanitization
+   let id = req.params.id.trim();
+   let status = req.params.status.trim();
+
    const field = await Field.findByIdAndUpdate(req.params.id,{status:req.body.status})
    return res.status(200).json(
       {

@@ -7,6 +7,8 @@ dotenv.config({ path: "./config.env" });
 import AppError from "./utils/AppError.js"
 import ErrorController from "./controllers/ErrorController.js"
 import formrouter from "./routes/FormRoutes.js"
+import eventEmitter from "./utils/eventEmmiter.js"
+import authRoutes from "./routes/authRoutes.js"
 
 const app  = express()
 app.use(cors())
@@ -25,16 +27,19 @@ mongoose
   })
   .then((con) => {
     console.log("Connected to database");
+    eventEmitter.emit("connected_to_database")
   })
   .catch((e) => {
     console.log(e);
     console.log("Error connecting to database")
 });
+
+app.use("/api/v1/user", authRoutes);
 app.use("/api/v1",formrouter);
 
 app.all("*",(req,res,next)=>{
-    next(new AppError(`Cant find this ${req.originalUrl} on this sever`,404));
-  })
+  next(new AppError(`Cant find this ${req.originalUrl} on this sever`,404));
+})
 
 app.use(ErrorController)
 
