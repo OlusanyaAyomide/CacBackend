@@ -73,14 +73,6 @@ export const getAllUsers = catchAsync(async(req,res,next)=>{
 })
 
 export const deleteUsers= catchAsync(async(req,res,next)=>{
-  // If the user ID provided is invalid
-  if (!isValidObjectId(req.params.id)) {
-    return res.status(400).json({
-      status:"error",
-      error: "Invalid User ID provided"
-    })
-  }
-
   // Attempt a deletion
   const deleted = await CacUser.findByIdAndDelete(req.params.id);
   // If the deletion failed

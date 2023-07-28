@@ -20,7 +20,7 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.checkPassword = async function (
     inputpassword,
     hashedpassword
-  ) {
+) {
     const isCorrect = await bcrypt.compare(inputpassword, hashedpassword);
     return isCorrect;
 };
