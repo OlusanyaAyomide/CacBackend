@@ -217,21 +217,26 @@ export const getAllCac = catchAsync(async(req, res, next) => {
 	// Change into a global, case-insensitive regex
 	const regex = new RegExp(`${term}`, 'gi');
 
-	// Get all businesses matching regex
-	let businesses = await Business.find({ $or: [{"companyName1": {"$regex": regex}}, {"companyName2": {"$regex": regex}}]});
-
+	// Get all businesses matching regex and return array of id objects
+	let businesses = await Business.find({ $or: [{"companyName1": {"$regex": regex}}, {"companyName2": {"$regex": regex}}]}, {_id: 1, info:0})
 	// map to only ID
 	businesses = businesses.map(elem => elem._id)
+	// Convert to set and back to array to remove duplicates
+	businesses = [...(new Set(businesses))]
 
 	// Find all fields with businesses matching at least one element in the businesses array
 	const fields = await Field.find({"business": {$in: businesses}});
 
-	// console.log(fields)
+	// Get all corresponding CAC POST Models
+	let postCAC = await cacPost.find({$or: [{"firstName": {"$regex": regex}}, {"lastName": {"$regex": regex}}, {"description": {"$regex": regex}}]})
 
 	// Send successful response
 	return res.status(200).json({
 		message: "Businesses retreived",
-		fields
+		data: {
+			fields,
+			postCAC
+		}
 	})
 
 })
