@@ -6,11 +6,11 @@ import { cacPost } from "../models/cacModel.js";
 import { isValidObjectId, Types } from "mongoose";
 
 export const postField = catchAsync(async(req,res,next)=>{
-   console.log("Innn hereeee")
-   const infos = await Info.insertMany(req.body.business.info)
-   const info = infos.map((item)=>{return item._id})
-   const newBusiness = await Business.create({...req.body.business,info})
-   const newField = await Field.create({
+	console.log("Innn hereeee")
+	const infos = await Info.insertMany(req.body.business.info)
+	const info = infos.map((item)=>{return item._id})
+	const newBusiness = await Business.create({...req.body.business,info})
+	const newField = await Field.create({
       ...req.body,
       business:newBusiness._id
 	})
