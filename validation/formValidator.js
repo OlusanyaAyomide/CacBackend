@@ -8,7 +8,7 @@ export async function baseValidator(req,res,next){
 
   if (validation.error) {
     const error = validation.error.message ? validation.error.message : validation.error.details[0].message;
-    return res.status(200).json({error})
+    return res.status(400).json({error})
   }
   return next()      
 }
@@ -20,7 +20,7 @@ export async function postCacValidation(req,res,next){
 
   if (validation.error) {
     const error = validation.error.message ? validation.error.message : validation.error.details[0].message;
-    return res.status(200).json({error})
+    return res.status(400).json({error})
   }
   return next()
 }
@@ -34,7 +34,7 @@ export async function updateStatusValidation(req,res,next){
   const validation = schema.validate(req.body);
   if (validation.error) {
     const error = validation.error.message ? validation.error.message : validation.error.details[0].message;
-    return res.status(200).json({error})
+    return res.status(400).json({error})
   }
   return next()
 }
@@ -45,7 +45,7 @@ export async function validateNewUser(req,res,next){
   const validation = userSchema.validate(req.body);
   if (validation.error) {
     const error = validation.error.message ? validation.error.message : validation.error.details[0].message;
-    return res.status(200).json({error})
+    return res.status(400).json({error})
   }
   return next()
 }

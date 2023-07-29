@@ -14,13 +14,13 @@ const formSchema = Joi.object().keys({
 	business:Joi.object().keys({
 		companyName1:Joi.string().required(),
 		companyName2:Joi.string().required(),
-		companyName3:Joi.string(),
+		companyName3:Joi.string().optional().allow(""),
 		businessType:Joi.string().required(),
-		ngoType:Joi.string(),
+		ngoType:Joi.string().optional().allow(""),
 		companyDescription:Joi.string().required(),
 		info: Joi.array().items(Joi.object({
 			userid: Joi.string().required(),
-			shares: Joi.string().required(),
+			shares: Joi.string().allow(""),
 			firstName: Joi.string().required(),
 			lastName: Joi.string().required(),
 			email: Joi.string().required(),
