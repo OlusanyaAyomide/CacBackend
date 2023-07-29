@@ -7,20 +7,19 @@ const cacPostSchema = new mongoose.Schema({
     description: { type: String },
     companyName:{type:String},
     files:[
-        {type:String}
+      {type:String}
     ],
     },
     {
-        timestamps: { createdAt: true, updatedAt: false }
+      timestamps: { createdAt: true, updatedAt: false }
     }
-
 );
 
 cacPostSchema.pre(/^find/,function(next){
     this.select("-__v").sort({
-        createdAt: -1
-      })
+    createdAt: -1
+    })
     next()
 })
-  
+
 export const cacPost = mongoose.model("cacpost",cacPostSchema)

