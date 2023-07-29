@@ -3,7 +3,6 @@ import { Field } from "../models/FieldModel.js";
 import { Business } from "../models/businessModel.js";
 import { Info } from "../models/infoModel.js";
 import { cacPost } from "../models/cacModel.js";
-import { isValidObjectId, Types } from "mongoose";
 
 export const postField = catchAsync(async(req,res,next)=>{
 	console.log("Innn hereeee")
@@ -92,8 +91,6 @@ const { status, duration,page,limit } = req.query;
 
 
 export const findField = catchAsync(async(req,res,next)=>{
-   // Trim ID, minor sanitization
-	let id = req.params.id.trim();
 
    // Find field
 	const field = await Field.findById(req.params.id)
@@ -117,9 +114,7 @@ export const findField = catchAsync(async(req,res,next)=>{
 })
 
 export const updateStatus = catchAsync(async(req,res,next)=>{
-   // Trimming, minor sanitization
-	let id = req.params.id.trim();
-	let status = req.params.status.trim();
+	let status = req.body.status.trim();
 
 	const field = await Field.findByIdAndUpdate(req.params.id,{status:req.body.status})
 	return res.status(200).json(
