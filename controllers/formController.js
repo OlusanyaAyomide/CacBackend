@@ -239,4 +239,17 @@ export const getAllCac = catchAsync(async(req, res, next) => {
 
 })
 
-
+export const deleteField = catchAsync(async (req,res,next)=>{
+	const deleted = await Field.findByIdAndDelete(req.body._id)
+	if (!deleted) {
+		return res.status(404).json({
+		  status:"error",
+		  error: "Field not found in database"
+		})
+	  }
+	
+	  // Everything Successful
+	  return res.status(200).json({
+		status:"success"
+	  })
+})
