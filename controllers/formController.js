@@ -114,13 +114,13 @@ export const findField = catchAsync(async(req,res,next)=>{
 })
 
 export const updateStatus = catchAsync(async(req,res,next)=>{
-	let status = req.body.status.trim();
 
 	const field = await Field.findByIdAndUpdate(req.params.id,{status:req.body.status})
+	const newData = await Field.findById(field._id)
 	return res.status(200).json(
       {
 				status:"success", 
-				data:field
+				data:newData
       }
 	)
 })

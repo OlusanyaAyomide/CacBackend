@@ -17,6 +17,7 @@ const formSchema = Joi.object().keys({
 		companyName3:Joi.string().optional().allow(""),
 		businessType:Joi.string().required(),
 		ngoType:Joi.string().optional().allow(""),
+		value:Joi.string().optional().allow(""),
 		companyDescription:Joi.string().required(),
 		info: Joi.array().items(Joi.object({
 			userid: Joi.string().required(),
