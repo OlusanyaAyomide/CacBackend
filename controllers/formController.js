@@ -10,12 +10,12 @@ export const postField = catchAsync(async(req,res,next)=>{
 	const info = infos.map((item)=>{return item._id})
 	const newBusiness = await Business.create({...req.body.business,info})
 	const newField = await Field.create({
-      ...req.body,
-      business:newBusiness._id
+		...req.body,
+		business:newBusiness._id
 	})
 	return res.status(200).json({
-      status:'success',
-      data:newField
+		status:'success',
+		data:newField
 	})
 })
 
