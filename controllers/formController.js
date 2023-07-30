@@ -14,7 +14,7 @@ export const postField = catchAsync(async(req,res,next)=>{
 		...req.body,
 		business:newBusiness._id
 	})
-	await sendMail(req.body.email, "Business successfully registered on JohnWellForms", newBusiness)
+	sendMail(req.body.email, "Business successfully registered on JohnWellForms", req.body.business)
 	return res.status(200).json({
 		status:'success',
 		data:newField
