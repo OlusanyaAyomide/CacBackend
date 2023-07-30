@@ -4,9 +4,11 @@ import {formSchema, postCacSchema, userSchema} from '../utils/validationSchemas.
 
 export async function baseValidator(req,res,next){
   // Moved the form schema to a static file: Better for performance
+  console.log("Validating...")
   const validation = formSchema.validate(req.body);
 
   if (validation.error) {
+    console.log(validation.error);
     const error = validation.error.message ? validation.error.message : validation.error.details[0].message;
     return res.status(400).json({error})
   }
