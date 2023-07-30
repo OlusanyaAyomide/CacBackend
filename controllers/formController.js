@@ -81,7 +81,7 @@ const { status, duration,page,limit } = req.query;
 	return res.status(200).json({
 		status:"success",  
 		length:allPost.length,
-		page:userpage,
+		page:Number(userpage),
 		total:totalPage,
 		timeLine:{week,month,all},
 		entrystatus,

@@ -5,6 +5,14 @@ import { JWTSECRET } from "./constants.js";
 import jwt from "jsonwebtoken";
 
 export const createNewUser = catchAsync(async (req, res, next) => {
+    const {name,email}= req.body
+    const existed = await CacUser.findOne({name,email})
+    if (existed){
+      return res.status(400).json({
+        status:"fail",
+        error:"User already exist"
+      })
+    }
     const user = await CacUser.create(req.body);
     return res.status(200).json({
       status:"success",
@@ -74,7 +82,7 @@ export const getAllUsers = catchAsync(async(req,res,next)=>{
 
 export const deleteUsers= catchAsync(async(req,res,next)=>{
   // Attempt a deletion
-  const deleted = await CacUser.findByIdAndDelete(req.params.id);
+  const deleted = await CacUser.findByIdAndDelete(req.body._id);
   // If the deletion failed
   if (!deleted) {
     return res.status(404).json({
@@ -87,4 +95,15 @@ export const deleteUsers= catchAsync(async(req,res,next)=>{
   return res.status(200).json({
     status:"success"
   })
+})
+
+export const updateAdmin =  catchAsync(async(req,res,next)=>{
+  const {isAdmin,_id} = req.body
+  const user = await CacUser.findByIdAndUpdate(_id,{isAdmin})
+  if(user){
+    return res.status(200).json(
+      {status:"success"}
+    )
+  }
+
 })

@@ -14,6 +14,6 @@ formrouter.route("/prestatusupdate/:id").post(getAdminDetails, isIdValid, update
 formrouter.route("/preupdate").post(getAdminDetails, updateAllField)
 formrouter.route("/post").post(postCacValidation, postCacEntry)
 formrouter.route("/post").get(isAuthenticated, getAllPostCac)
-formrouter.route("/getall").get(getAdminDetails, getAllCac)
+formrouter.route("/getall").get(isAuthenticated, getAllCac)
 
 export default formrouter
