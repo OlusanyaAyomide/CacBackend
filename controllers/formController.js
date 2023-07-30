@@ -3,6 +3,7 @@ import { Field } from "../models/FieldModel.js";
 import { Business } from "../models/businessModel.js";
 import { Info } from "../models/infoModel.js";
 import { cacPost } from "../models/cacModel.js";
+import { sendMail } from "../utils/mailer.js";
 
 export const postField = catchAsync(async(req,res,next)=>{
 	console.log("Innn hereeee")
@@ -13,6 +14,7 @@ export const postField = catchAsync(async(req,res,next)=>{
 		...req.body,
 		business:newBusiness._id
 	})
+	await sendMail(req.body.email, "Business successfully registered on JohnWellForms", newBusiness)
 	return res.status(200).json({
 		status:'success',
 		data:newField
@@ -25,7 +27,7 @@ export const getFields = catchAsync(async(req,res,next)=>{
 		return TimeAgo.setDate(TimeAgo.getDate()-number)
 	}
 
-const { status, duration,page,limit } = req.query;
+	const { status, duration,page,limit } = req.query;
 	
 	const filter = {};
 	const userpage = page?page:1
@@ -150,6 +152,7 @@ export const updateAllField = catchAsync(async(req,res,next)=>{
 
 export const postCacEntry = catchAsync(async(req,res,next)=>{
 	const newEntry = await cacPost.create(req.body)
+	// Send mail here
 	return res.status(200).json({status:"success",entry:newEntry})
 })
 

@@ -10,7 +10,7 @@ const PORT = process.env.port || 4000;
 // console.log(process.env.user);
 // console.log(process.env.NODE_ENV);
 
-sendMail("onotaizee@gmail.com", "HAHAHA", "Body blah blah blah")
+// sendMail("onotaizee@gmail.com", "HAHAHA", "Body blah blah blah")
 
 app.set("port", PORT);
 
