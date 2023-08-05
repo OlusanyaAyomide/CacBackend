@@ -53,5 +53,16 @@ const postCacSchema = Joi.object({
 	files: Joi.array().items(Joi.string())
 });
 
+const taxSchema =Joi.object({
+	firstName:Joi.string().required(),
+    lastName:Joi.string().required(),
+    phone:Joi.string().required(),
+    email:Joi.string().required(),
+    companyName:Joi.string().required(),
+    BNNumber:Joi.string().required(),
+    regDate:Joi.date().required(),
+    address:Joi.string().required(),
+	activationKey:Joi.string().required(),
+}) 
 
-export {formSchema, userSchema, postCacSchema};
+export {formSchema, userSchema, postCacSchema,taxSchema};

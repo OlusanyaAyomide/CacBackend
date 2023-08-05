@@ -4,6 +4,7 @@ import { Business } from "../models/businessModel.js";
 import { Info } from "../models/infoModel.js";
 import { cacPost } from "../models/cacModel.js";
 import { sendMail } from "../utils/mailer.js";
+import { TaxModel } from "../models/taxModel.js";
 
 export const postField = catchAsync(async(req,res,next)=>{
 	console.log("Innn hereeee")
@@ -162,7 +163,7 @@ export const getAllPostCac = catchAsync(async(req,res,next)=>{
 	return TimeAgo.setDate(TimeAgo.getDate()-number)
 	}
 
-	const { status, duration,page,limit } = req.query;
+	const { duration,page,limit } = req.query;
 	
 	const filter = {};
 	const userpage = page?page:1
@@ -193,7 +194,7 @@ export const getAllPostCac = catchAsync(async(req,res,next)=>{
 	return res.status(200).json({
 		status:"success",
 		length:allPost.length,
-		page:userpage,
+		page:Number(userpage),
 		total:totalPage,
 		timeLine:{week,month,all},
 		data:allPost
@@ -252,4 +253,55 @@ export const deleteField = catchAsync(async (req,res,next)=>{
 	  return res.status(200).json({
 		status:"success"
 	  })
+})
+
+
+export const postTax = catchAsync(async(req,res,next)=>{
+	const newTax = await TaxModel.create(req.body)
+	return res.status(200).json({status:"success",FormData:newTax})
+})
+
+
+export const getAllTax = catchAsync(async(req,res,next)=>{
+	const getTimeAgo = (number)=>{
+	const TimeAgo = new Date()
+	return TimeAgo.setDate(TimeAgo.getDate()-number)
+	}
+
+	const { duration,page,limit } = req.query;
+	
+	const filter = {};
+	const userpage = page?page:1
+	const pagelimit = limit?limit:10
+
+
+
+	if (duration) {
+      const currentDate = new Date();
+      if (duration === 'week') {
+				const oneWeekAgo = getTimeAgo(7)
+				filter.createdAt = { $gte: oneWeekAgo, $lte: currentDate };
+      } else if (duration === 'month') {
+				const oneMonthAgo = getTimeAgo(31)
+				filter.createdAt = { $gte: oneMonthAgo, $lte: currentDate };
+      }
+	}
+
+	const all = await TaxModel.find({}).count()
+	const currentDate = new Date();
+	const sevenDaysAgo = getTimeAgo(7)
+	const week =await  TaxModel.find({ createdAt: { $gte: sevenDaysAgo, $lte: currentDate } }).count()
+	const monthAgo = getTimeAgo(31)
+	const month = await TaxModel.find({ createdAt: { $gte: monthAgo, $lte: currentDate } }).count()
+	const allTax = await TaxModel.find(filter).limit(pagelimit).skip((userpage*pagelimit)-pagelimit)
+	const totalPage = Math.ceil(all/pagelimit)
+
+	return res.status(200).json({
+		status:"success",
+		length:allTax.length,
+		page:Number(userpage),
+		total:totalPage,
+		timeLine:{week,month,all},
+		data:allTax
+	})
 })

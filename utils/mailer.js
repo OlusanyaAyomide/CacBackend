@@ -14,6 +14,7 @@ async function transformInfo(business) {
 		</ol>
 	</div>
 	`
+	
 	let info = business.info
 	for (let i in info) {
 		let information =
