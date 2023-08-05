@@ -23,8 +23,8 @@ async function transformInfo(business) {
 		<div style="border-radius: 4px; color: white; background-color: #084766; padding: 10px; margin-bottom: 14px;">
 			<h2>Partner ${Number(i)+1}</h2>
 			<ol>
-			<li>First name: ${info[i].firstname}</li>
-			<li>Last name: ${info[i].lastname}</li>
+			<li>First name: ${info[i].firstName}</li>
+			<li>Last name: ${info[i].lastName}</li>
 			<li>Email: ${info[i].email}</li>
 			<li>Phone: ${info[i].phone}</li>
 			<li>Address: ${info[i].address}</li>
