@@ -76,8 +76,8 @@ export async function sendMail(to, subject, business ) {
 
 		transporter.sendMail(message, (err, info) => {
 				if (err) {
-						console.log('Error occurred. ' + err.message);
-						return process.exit(1);
+					console.log('Error occurred. ' + err.message);
+					return process.exit(1);
 				}
 
 				console.log('Message sent: %s', info.messageId);

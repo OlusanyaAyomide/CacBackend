@@ -5,13 +5,15 @@ const infoSchema = new mongoose.Schema({
     lastName: { type: String },
     email: { type: String },
     phone: { type: String },
-    address: { type: String },
-    city: { type: String },
-    zipcode: { type: String },
     passport: { type: String },
     signature: { type: String },
     userid: { type: String },
     shares: { type: String },
+    city: { type: String },
+    state:{type:String},
+    officeNumber:{type:String},
+    officeStreet:{type:String},
+    dateOfBirth:{type:Date}
 });
 
 
