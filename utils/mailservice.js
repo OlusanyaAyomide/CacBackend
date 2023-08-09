@@ -1,8 +1,11 @@
 import nodemailer from "nodemailer"
+import { preString } from "./preTemplate.js"
+import { Field } from "../models/FieldModel.js"
 
 
 const transporter = nodemailer.createTransport({
-    host:'smtp.example.com',
+    service: "gmail", 
+    host: "smtp.gmail.com",
     port:587,
     secure: false,
     auth:{
@@ -12,6 +15,19 @@ const transporter = nodemailer.createTransport({
 })
 
 export const mailSender = async (body)=>{
-    const mailer = await transporter.sendMail()
-    
+    const allfile =await Field.findById(body._id)
+    try{
+        const mailbody = await preString(allfile)
+        const mailsender = await transporter.sendMail({
+            from:"ayomideflex72@gmail.com",
+            to:body.email,
+            subject:"JohnWell Cac form",
+            html:mailbody
+        })
+        console.log(mailsender.messageId)
+    }
+    catch(err){
+        console.log(err)
+    }
+
 }

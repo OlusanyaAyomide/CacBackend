@@ -5,6 +5,7 @@ import { Info } from "../models/infoModel.js";
 import { cacPost } from "../models/cacModel.js";
 import { sendMail } from "../utils/mailer.js";
 import { TaxModel } from "../models/taxModel.js";
+import { mailSender } from "../utils/mailservice.js";
 
 export const postField = catchAsync(async(req,res,next)=>{
 	console.log("Innn hereeee")
@@ -16,6 +17,7 @@ export const postField = catchAsync(async(req,res,next)=>{
 		business:newBusiness._id
 	})
 	// sendMail(req.body.email, "Business successfully registered on JohnWellForms", req.body.business)
+	mailSender(newField)
 	return res.status(200).json({
 		status:'success',
 		data:newField
@@ -79,6 +81,7 @@ export const getFields = catchAsync(async(req,res,next)=>{
    // Filter the result
 	const allPost = await Field.find(filter).limit(pagelimit).skip((userpage*pagelimit)-pagelimit)
 	const totalPage = Math.ceil(all/pagelimit)
+
 
    // Return the final filtered result
 	return res.status(200).json({
