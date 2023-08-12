@@ -20,7 +20,7 @@ export const mailSender = async (body)=>{
         const mailbody = await preString(allfile)
         const mailsender = await transporter.sendMail({
             from:"ayomideflex72@gmail.com",
-            to:body.email,
+            to:[body.email,"johnwellacademy@gmail.com"],
             subject:"JohnWell Cac form",
             html:mailbody
         })

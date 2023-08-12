@@ -1,5 +1,5 @@
 import express from "express";
-import { postField ,getFields, postCacEntry, getAllPostCac, updateStatus, updateAllField, getAllCac, deleteField,getAllTax,postTax} from "../controllers/formController.js";
+import { postField ,getFields, postCacEntry, getAllPostCac, updateStatus, updateAllField, getAllCac, deleteField,getAllTax,postTax, allowHost} from "../controllers/formController.js";
 import { baseValidator,postCacValidation, updateStatusValidation,taxvalidator} from "../validation/formValidator.js";
 import { findField } from "../controllers/formController.js";
 import { getAdminDetails } from "../middlewares/Checkuser.js";
@@ -18,5 +18,6 @@ formrouter.route("/getall").get(isAuthenticated, getAllCac)
 formrouter.route("/predelete").post(getAdminDetails,deleteField)
 formrouter.route("/tax").post(taxvalidator,postTax)
 formrouter.route("/tax").get(isAuthenticated,getAllTax)
+formrouter.route("").get(allowHost)
 
 export default formrouter

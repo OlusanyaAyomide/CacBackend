@@ -8,6 +8,10 @@ const businessSchema = new mongoose.Schema({
     businessType:{type:String},
     ngoType:{type:String},
     companyDescription:{type:String},
+    companyNumber:{type:String},
+    companyStreet:{type:String},
+    companyCity:{type:String},
+    companyState:{type:String},
     info:[{ type: mongoose.Schema.Types.ObjectId, ref:'info'}]
 })
 

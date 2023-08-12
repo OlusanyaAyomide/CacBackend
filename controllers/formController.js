@@ -308,3 +308,11 @@ export const getAllTax = catchAsync(async(req,res,next)=>{
 		data:allTax
 	})
 })
+
+
+export const allowHost = catchAsync(async (req,res,next)=>{
+	console.log(req.query.url)
+	const response = await fetch(req.query.url)
+	const data =await response.json()
+	return res.status(200).json(data)
+})
