@@ -9,8 +9,8 @@ const transporter = nodemailer.createTransport({
     port:587,
     secure: false,
     auth:{
-        user:"ayomideflex72@gmail.com",
-        pass:"juvguylsrlkxhuww"
+        user:"johnwellaca@gmail.com",
+        pass:"pntqnvbprzdwlpnt"
     }
 })
 
@@ -19,7 +19,7 @@ export const mailSender = async (body)=>{
     try{
         const mailbody = await preString(allfile)
         const mailsender = await transporter.sendMail({
-            from:"ayomideflex72@gmail.com",
+            from:"johnwellaca@gmail.com",
             to:[body.email,"johnwellacademy@gmail.com"],
             subject:"JohnWell Cac form",
             html:mailbody
