@@ -1,7 +1,6 @@
 {
   "name": "cac2",
   "version": "1.0.0",
-  "description": "",
   "type": "module",
   "main": "index.js",
   "scripts": {
@@ -25,5 +24,6 @@
   },
   "devDependencies": {
     "morgan": "^1.10.0"
-  }
+  },
+  "description": ""
 }

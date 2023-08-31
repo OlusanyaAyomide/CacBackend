@@ -1,4 +1,3 @@
-import { isObjectIdOrHexString, isValidObjectId } from "mongoose";
 import { CacUser } from "../models/userModel.js";
 import catchAsync from "../utils/globalerr.js";
 import { JWTSECRET } from "./constants.js";

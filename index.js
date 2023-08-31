@@ -1,11 +1,12 @@
 import dotenv from "dotenv";
 dotenv.config({ path: "./config.env" });
-import http from "http";
+// import http from "http";
+import https from "https"
 import app from "./app.js";
 import eventEmitter from "./utils/eventEmmiter.js";
 import { sendMail } from "./utils/mailer.js";
 
-const server = http.createServer(app);
+const server = https.createServer(app);
 const PORT = process.env.port || 4000;
 // console.log(process.env.user);
 // console.log(process.env.NODE_ENV);
