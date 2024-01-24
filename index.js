@@ -26,7 +26,7 @@ app.set("port", PORT);
 
 // Database connects first before server goes up and running;
 eventEmitter.on("connected_to_database", () => {
-  httpServer.listen(4000,()=>{"Http server running"})
+  httpServer.listen(4000, '0.0.0.0',()=>{"Http server running"})
   server.listen(8443, () => {
     console.log(`https server running on port`);
   });
