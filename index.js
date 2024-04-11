@@ -14,7 +14,7 @@ const options = {
   ca:fs.readFileSync("csr.pem",'utf-8')
 }
 
-const server = https.createServer(options,app);
+// const server = https.createServer(options,app);
 const httpServer = http.createServer(app)
 const PORT = process.env.port || 4000;
 // console.log(process.env.user);
@@ -24,10 +24,9 @@ const PORT = process.env.port || 4000;
 
 app.set("port", PORT);
 
-// Database connects first before server goes up and running;
-eventEmitter.on("connected_to_database", () => {
-  httpServer.listen(4000,()=>{"Http server running"})
-  server.listen(8443, () => {
-    console.log(`https server running on port`);
-  });
-})
+// Database connects first before server goes up and running
+httpServer.listen(PORT,()=>{"Http server now running running"})
+  // server.listen(8443, () => {
+  //   console.log(`https server running on port`);
+  // });
+
