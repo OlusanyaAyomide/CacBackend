@@ -8,7 +8,7 @@ const formatDate = (date)=>{
     const monthIndex = dob.getMonth();
     const year = dob.getFullYear();
 
-    return `${day} / ${months[monthIndex]} / ${year}`;
+    return `${day+1} / ${months[monthIndex]} / ${year}`;
 
 }
 
