@@ -1,11 +1,22 @@
 import { Info } from "../models/infoModel.js"
 
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+const formatDate = (date)=>{
+    const dob = new Date(date)
+    const day = dob.getDate();
+    const monthIndex = dob.getMonth();
+    const year = dob.getFullYear();
+
+    return `${day} / ${months[monthIndex]} / ${year}`;
+
+}
+
 export const preString = async (data)=>{
     const infos =await Info.find({ _id: { $in: data.business.info } })
     data.business
     let infoArray =""
     infos.map((item)=>{
-
         let infostring =`
         <div style="text-align: center; margin-top: 0.2rem; font-size: 1rem; justify-content: space-between;">
             <span style="font-weight: bold; font-size: 1em; margin-right: 24px;">FirstName :</span>
@@ -54,7 +65,7 @@ export const preString = async (data)=>{
         
          <div style="text-align: center; margin-top: 0.2rem; font-size: 1rem; justify-content: space-between;">
             <span style="font-weight: bold; font-size: 1em; margin-right: 24px;">dateOfBirth :</span>
-            <span>${item.dateOfBirth}</span>
+            <span>${formatDate(item.dateOfBirth)}</span>
          </div>
 
          <div style="display: block; margin-top: 1.5rem;">
@@ -118,7 +129,7 @@ export const preString = async (data)=>{
     
     <div style="text-align: center; margin-top: 0.2rem; font-size: 1rem; justify-content: space-between;">
         <span style="font-weight: bold; font-size: 1em; margin-right: 24px;">Date Of Birth :</span>
-        <span>${data.dateOfBirth}</span>
+        <span>${formatDate(data.dateOfBirth)}</span>
     </div>
     
         
